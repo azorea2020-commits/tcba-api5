@@ -1,28 +1,39 @@
-// server.js
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const sqlite3 = require("sqlite3").verbose();
+require("dotenv").config();
 
 const app = express();
-app.use(cors());
+const PORT = process.env.PORT || 5000;
+
+// Middleware
 app.use(express.json());
 
-// Health check
-app.get('/healthz', (req, res) => {
-  res.status(200).json({ ok: true, uptime: process.uptime() });
+// Database
+const db = new sqlite3.Database("./db/tcba.db", (err) => {
+  if (err) {
+    console.error("Error opening database:", err.message);
+  } else {
+    console.log("Connected to SQLite database.");
+  }
 });
 
-// Basic root
-app.get('/', (req, res) => {
-  res.status(200).send('TCBA API is running');
+// Root route
+app.get("/", (req, res) => {
+  res.send("🐝 TCBA API is running!");
 });
 
-// Example API route
-app.get('/api/ping', (req, res) => {
-  res.json({ pong: true, ts: new Date().toISOString() });
+// Members route
+app.get("/members", (req, res) => {
+  db.all("SELECT * FROM members", [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json(rows);
+    }
+  });
 });
 
-const PORT = process.env.PORT || 5000;
+// Start server
 app.listen(PORT, () => {
-  console.log(`TCBA API listening on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
