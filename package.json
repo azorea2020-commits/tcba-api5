@@ -1,14 +1,25 @@
 {
   "name": "tcba-api",
   "version": "1.0.0",
-  "description": "Treasure Coast Bee Association API backend",
+  "description": "Treasure Coast Bee Association – Node/Express with Local + Google auth and static pages",
+  "private": true,
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
+  "engines": {
+    "node": ">=18.17 <23"
+  },
   "dependencies": {
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "express-session": "^1.18.2",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-local": "^1.0.0",
+    "passport-oauth2": "^1.8.0",
+    "passport-paypal": "^0.3.0",
     "sqlite3": "^5.1.7"
   }
 }
