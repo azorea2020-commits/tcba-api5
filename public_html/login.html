@@ -1,40 +1,114 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Login</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login - TCBA</title>
   <style>
-    body { display:flex; justify-content:center; align-items:center; height:100vh; background:#faf7ec; font-family:Arial; }
-    .box { background:#fff; padding:30px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,.15); width:300px; }
-    input { width:100%; margin:10px 0; padding:10px; border:1px solid #ccc; border-radius:6px; }
-    button { width:100%; padding:12px; background:#ffcc33; border:none; border-radius:6px; font-weight:bold; cursor:pointer; }
-    #status { margin-top:10px; color:red; font-size:14px; }
+    :root {
+      --honey:#ffcc33;
+      --honey-dark:#e6b800;
+      --panel-bg:rgba(0,0,0,0.45);
+      --panel-border:rgba(255,255,255,0.25);
+      --text:#fff;
+    }
+    * { box-sizing:border-box; }
+    html, body { height:100%; margin:0; font-family: Arial, Helvetica, sans-serif; }
+    .page {
+      min-height:100vh; display:grid; place-items:center; color:var(--text);
+      background: #000 url("images/hero-bg.jpg") center/cover no-repeat fixed;
+    }
+    .card {
+      width:min(92vw, 420px);
+      background:var(--panel-bg);
+      border:1px solid var(--panel-border);
+      border-radius:16px;
+      padding:24px 24px 20px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.45);
+      backdrop-filter: blur(6px);
+    }
+    .logo { width:120px; display:block; margin:0 auto 10px; }
+    h1 { text-align:center; margin:8px 0 18px; font-size:28px; }
+    .field { margin-bottom:12px; }
+    .input {
+      width:100%; padding:12px 14px; border-radius:10px; border:none;
+      outline:none; background:#fff; color:#111; font-size:15px;
+    }
+    .btn {
+      width:100%; padding:12px 14px; border-radius:10px; border:none;
+      font-weight:700; cursor:pointer; font-size:16px;
+    }
+    .btn-honey { background:var(--honey); color:#000; }
+    .btn-honey:hover { background:var(--honey-dark); }
+    .muted { opacity:.85; font-size:13px; text-align:center; margin-top:8px;}
+    .stack { display:flex; flex-direction:column; gap:10px; margin-top:12px; }
+    .btn-google {
+      background:#fff; color:#000; text-decoration:none; text-align:center;
+      padding:10px; border-radius:8px; font-weight:700; display:block;
+    }
+    .btn-fb {
+      background:#1877f2; color:#fff; text-decoration:none; text-align:center;
+      padding:10px; border-radius:8px; font-weight:700; display:block;
+    }
+    .err {
+      background:rgba(255,0,0,.15);
+      border:1px solid rgba(255,0,0,.35);
+      color:#fff; padding:8px 10px; border-radius:8px; margin:10px 0;
+      font-size:14px;
+    }
   </style>
 </head>
 <body>
-  <div class="box">
-    <h2>Login</h2>
-    <form id="login-form">
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="password" id="password" placeholder="Password" required>
-      <button type="submit">Login</button>
-    </form>
-    <p id="status"></p>
+  <div class="page">
+    <div class="card">
+      <img class="logo" src="images/logo-circle.png" alt="TCBA Logo" />
+      <h1>Welcome Back</h1>
+
+      <!-- optional error box (shown when ?err=... in URL) -->
+      <div id="err" class="err" style="display:none;"></div>
+
+      <!-- Local username/password (non-OAuth; wire to your own endpoint later) -->
+      <form id="local-form" autocomplete="on">
+        <div class="field">
+          <input class="input" type="text" id="username" placeholder="Username or Email" required />
+        </div>
+        <div class="field">
+          <input class="input" type="password" id="password" placeholder="Password" required />
+        </div>
+        <button class="btn btn-honey" type="submit">Login</button>
+      </form>
+
+      <!-- Social sign-in -->
+      <div class="stack">
+        <a class="btn-google" href="/auth/google">Continue with Google</a>
+        <a class="btn-fb"     href="/auth/facebook">Continue with Facebook</a>
+      </div>
+
+      <p class="muted">Don’t have an account? Use Google or Facebook to create one.</p>
+    </div>
   </div>
-<script>
-document.getElementById('login-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  const res = await fetch('/api/login', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ email, password })
-  });
-  const data = await res.json();
-  if (data.success) { window.location.href='welcome.html'; }
-  else { document.getElementById('status').innerText=data.error||'Login failed'; }
-});
-</script>
+
+  <script>
+    // show a friendly error if redirected back with ?err=oauth
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const err = params.get('err');
+      if (err) {
+        const box = document.getElementById('err');
+        box.style.display = 'block';
+        box.textContent = err === 'oauth'
+          ? 'Sign-in failed or was cancelled. Please try Google or Facebook again.'
+          : 'Login error. Please try again.';
+      }
+    })();
+
+    // prevent actual submit (until you wire a local /login API)
+    document.getElementById('local-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      // For now, rely on Google/Facebook buttons above.
+      // If you want this to redirect on "success", uncomment:
+      // window.location.href = '/welcome.html';
+    });
+  </script>
 </body>
 </html>
