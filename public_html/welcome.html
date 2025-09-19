@@ -1,15 +1,20 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Welcome</title>
-  <style>
-    body { display:flex; justify-content:center; align-items:center; height:100vh; background:#faf7ec; font-family:Arial; }
-    h1 { font-size:28px; }
-  </style>
+  <meta charset="utf-8">
+  <title>Welcome - TCBA</title>
+  <style> body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; } </style>
 </head>
 <body>
   <h1>Welcome to TCBA 🎉</h1>
+  <p>You are logged in.</p>
+  <pre id="me">Loading session…</pre>
+  <form method="POST" action="/auth/logout"><button>Log out</button></form>
+
+  <script>
+    fetch('/api/me').then(r=>r.json()).then(d=>{
+      document.getElementById('me').textContent = JSON.stringify(d, null, 2);
+    });
+  </script>
 </body>
 </html>

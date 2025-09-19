@@ -1,3 +1,4 @@
+// server.js
 require('dotenv').config();
 const path = require('path');
 const express = require('express');
@@ -9,89 +10,77 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// --- basic app setup ---
+// --- basics ---
 app.set('trust proxy', 1);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// --- session (required for Passport) ---
 app.use(
   session({
     secret: process.env.SESSION_SECRET || 'change-me',
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      secure: false,            // set true behind HTTPS proxy (Render); keep false locally
-      sameSite: 'lax',
-      maxAge: 1000 * 60 * 60 * 8 // 8h
-    }
+    cookie: { secure: false, sameSite: 'lax', maxAge: 1000 * 60 * 60 * 8 }
   })
 );
-
-// --- Passport base wiring ---
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Serialize minimal user into the session
-passport.serializeUser((user, done) => done(null, { id: user.id, name: user.name, provider: user.provider }));
+// --- passport serialize/deserialize ---
+passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((obj, done) => done(null, obj));
 
-// --- Google OAuth ---
+// --- Google OAuth (only if keys exist) ---
 if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
   passport.use(
     new GoogleStrategy(
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: process.env.GOOGLE_CALLBACK_URL, // e.g. http://localhost:5000/auth/google/callback
+        callbackURL:
+          process.env.GOOGLE_CALLBACK_URL ||
+          'http://localhost:5000/auth/google/callback',
       },
-      (accessToken, refreshToken, profile, done) => {
-        const user = { id: profile.id, name: profile.displayName, provider: 'google' };
-        return done(null, user);
+      (_accessToken, _refreshToken, profile, done) => {
+        done(null, { id: profile.id, name: profile.displayName, provider: 'google' });
       }
     )
   );
 
   app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-
   app.get(
     '/auth/google/callback',
-    passport.authenticate('google', {
-      failureRedirect: '/login.html?err=oauth',
-    }),
-    (req, res) => res.redirect('/welcome.html')
+    passport.authenticate('google', { failureRedirect: '/login.html?err=oauth' }),
+    (_req, res) => res.redirect('/welcome.html')
   );
 }
 
-// --- Facebook OAuth ---
+// --- Facebook OAuth (only if keys exist) ---
 if (process.env.FACEBOOK_APP_ID && process.env.FACEBOOK_APP_SECRET) {
   passport.use(
     new FacebookStrategy(
       {
         clientID: process.env.FACEBOOK_APP_ID,
         clientSecret: process.env.FACEBOOK_APP_SECRET,
-        callbackURL: process.env.FACEBOOK_CALLBACK_URL, // e.g. http://localhost:5000/auth/facebook/callback
-        profileFields: ['id', 'displayName', 'emails']
+        callbackURL:
+          process.env.FACEBOOK_CALLBACK_URL ||
+          'http://localhost:5000/auth/facebook/callback',
+        profileFields: ['id', 'displayName', 'emails'],
       },
-      (accessToken, refreshToken, profile, done) => {
-        const user = { id: profile.id, name: profile.displayName, provider: 'facebook' };
-        return done(null, user);
+      (_accessToken, _refreshToken, profile, done) => {
+        done(null, { id: profile.id, name: profile.displayName, provider: 'facebook' });
       }
     )
   );
 
   app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
-
   app.get(
     '/auth/facebook/callback',
-    passport.authenticate('facebook', {
-      failureRedirect: '/login.html?err=oauth',
-    }),
-    (req, res) => res.redirect('/welcome.html')
+    passport.authenticate('facebook', { failureRedirect: '/login.html?err=oauth' }),
+    (_req, res) => res.redirect('/welcome.html')
   );
 }
 
-// --- auth helpers ---
+// --- helpers ---
 function requireAuth(req, res, next) {
   if (req.isAuthenticated && req.isAuthenticated()) return next();
   return res.redirect('/login.html');
@@ -104,17 +93,18 @@ app.get('/logout', (req, res, next) => {
   });
 });
 
-// --- static files ---
-const publicDir = path.join(__dirname, 'public_html');
-app.use(express.static(publicDir, { index: 'index.html' }));
+// --- static site ---
+const PUBLIC = path.join(__dirname, 'public_html');
+app.use(express.static(PUBLIC, { index: 'index.html' }));
 
-// Protected example (optional): if you want to gate a route
-app.get('/app', requireAuth, (req, res) => res.redirect('/welcome.html'));
+// optional protected route example
+app.get('/app', requireAuth, (_req, res) => res.redirect('/welcome.html'));
 
-// health
+// health & fallback
 app.get('/healthz', (_req, res) => res.status(200).send('ok'));
+app.get('*', (_req, res) => res.sendFile(path.join(PUBLIC, 'index.html')));
 
-// fallback: return index.html for other GETs
-app.get('*', (req, res) => res.sendFile(path.join(publicDir, 'index.html')));
-
-app.listen(PORT, () => console.log(`TCBA API listening on port ${PORT}`));
+// --- start ---
+app.listen(PORT, () => {
+  console.log(`TCBA API listening on port ${PORT}`);
+});
