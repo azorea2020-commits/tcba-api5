@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Treasure Coast Bee Association 🐝</title>
+  <link rel="stylesheet" href="styles/style.css">
+  <style>
+    /* Inline enhancements specific to the landing page */
+    .hero {
+      background: url("assets/bee-garden-bg.jpg") no-repeat center center/cover;
+      text-align: center;
+      padding: 120px 20px;
+      color: #3a2e1f;
+      text-shadow: 1px 1px 4px #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      animation: fadeIn 2s ease;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      margin-bottom: 15px;
+      color: #3a2e1f;
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 25px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn {
+      background: #f6b93b;
+      color: #3a2e1f;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    }
+
+    .btn:hover {
+      background: #ffcb46;
+      transform: translateY(-3px);
+    }
+
+    .features {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin: 40px auto;
+      max-width: 1000px;
+      text-align: center;
+    }
+
+    .feature {
+      background: #fff8dc;
+      border-radius: 15px;
+      width: 280px;
+      padding: 25px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    }
+
+    .feature img {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 15px;
+    }
+
+    .feature h3 {
+      color: #3a2e1f;
+      margin-bottom: 10px;
+    }
+
+    .feature p {
+      font-size: 0.95rem;
+      color: #4a3a20;
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      background: #ffd24c;
+      color: #3a2e1f;
+      padding: 15px;
+      border-top: 3px solid #c08b00;
+      font-weight: bold;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🐝 Treasure Coast Bee Association</h1>
+    <nav>
+      <a href="homepage.html">Home</a>
+      <a href="news.html">News</a>
+      <a href="login.html">Login</a>
+      <a href="signup.html">Join</a>
+      <a href="teen-news.html">Teens</a>
+      <a href="learn.html">Learn</a>
+      <a href="welcome.html">Members</a>
+      <a href="Beepics/">Bee Pics</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Welcome to the Hive</h1>
+    <p>
+      Discover a world of pollinators, honey, and learning!  
+      Join the Treasure Coast Bee Association and protect the bees that keep our planet blooming.
+    </p>
+    <a href="signup.html" class="btn">Become a Member</a>
+  </section>
+
+  <section class="features">
+    <div class="feature">
+      <img src="assets/honeycomb.png" alt="Honeycomb">
+      <h3>Learn Beekeeping</h3>
+      <p>From beginners to experts, explore classes, videos, and workshops about honeybees and their care.</p>
+    </div>
+    <div class="feature">
+      <img src="assets/honey-jar.png" alt="Honey Jar">
+      <h3>Buy Local Honey</h3>
+      <p>Support our members! Visit our bee marketplace for fresh honey, wax products, and bee art.</p>
+    </div>
+    <div class="feature">
+      <img src="assets/bee.png" alt="Bee Icon">
+      <h3>Join the Community</h3>
+      <p>Connect with fellow beekeepers, attend events, and help protect pollinators in your neighborhood.</p>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 Treasure Coast Bee Association • All Rights Reserved
+  </footer>
+</body>
+</html>

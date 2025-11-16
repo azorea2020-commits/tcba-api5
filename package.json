@@ -1,14 +1,15 @@
 {
   "name": "tcba-api",
   "version": "1.0.0",
+  "description": "TCBA API (Render)",
   "main": "server.js",
-  "type": "commonjs",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "render-build": "echo 'no build step'"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.19.2",
-    "express-session": "^1.17.3"
+    "sqlite3": "^5.1.7"
   }
 }

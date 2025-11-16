@@ -1,0 +1,40 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>TCBA Sign Up</title>
+<h1>Create your TCBA account</h1>
+<form id="s">
+  <input name="name" placeholder="Your name" required />
+  <input name="email" type="email" placeholder="Email" required />
+  <input name="password" type="password" placeholder="Password" required />
+  <button>Create Account</button>
+</form>
+<pre id="out" style="white-space:pre-wrap;background:#f6f6f6;padding:8px;border:1px solid #ddd;"></pre>
+
+<script src="config.js"></script>
+<script>
+function api(u, opts={}) {
+  return fetch(window.API_BASE + u, {
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    ...opts
+  }).then(r => r.json());
+}
+
+document.getElementById("s").addEventListener("submit", async e => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const payload = {
+    name: fd.get("name"),
+    email: fd.get("email"),
+    password: fd.get("password")
+  };
+  const out = document.getElementById("out");
+  try {
+    const r = await api("/signup", { method: "POST", body: JSON.stringify(payload) });
+    out.textContent = JSON.stringify(r, null, 2);
+    if (r && r.ok) location.href = "/welcome.html";
+  } catch (err) {
+    out.textContent = "Error: " + (err?.message || String(err));
+  }
+});
+</script>

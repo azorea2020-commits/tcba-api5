@@ -1,0 +1,18 @@
+app = "tcba-api-mbm"
+primary_region = "ord"
+
+[env]
+  PORT = "10000"
+  NODE_ENV = "production"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 10000
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]

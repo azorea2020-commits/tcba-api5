@@ -1,0 +1,118 @@
+
+/* === TCBA Global Styles + Nav Bar === */
+
+/* Reset basics */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #fafafa; color: #333; }
+
+/* NAV CONTAINER */
+.navbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffcc33;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 6px 0;
+  border-top: 3px solid #333;
+  z-index: 999;
+}
+
+/* Desktop: move nav to top */
+@media (min-width: 800px) {
+  .navbar { 
+    top: 0; bottom: auto; border-top: none; border-bottom: 3px solid #333;
+    justify-content: flex-start; gap: 32px; padding: 10px 20px;
+  }
+}
+
+/* NAV ITEMS */
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  font-size: 13px;
+  transition: color 0.3s ease;
+}
+
+.nav-item svg {
+  width: 26px; height: 26px;
+  margin-bottom: 4px;
+  fill: #333;
+  transition: fill 0.3s ease;
+}
+
+/* ACTIVE / HOVER STATES */
+.nav-item.active, .nav-item:hover {
+  color: #000;
+}
+.nav-item.active svg, .nav-item:hover svg {
+  fill: #000;
+  filter: drop-shadow(0 0 6px #ffeb99);
+}
+
+/* BRAND LOGO LEFT */
+.nav-brand {
+  display: none;
+  align-items: center;
+  font-weight: bold;
+  font-size: 16px;
+  color: #000;
+}
+.nav-brand svg {
+  width: 32px; height: 32px; margin-right: 6px;
+  fill: #000;
+}
+@media (min-width: 800px) {
+  .nav-brand { display: flex; }
+}/* Error box */
+#loginError {
+  display: none;
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  background: #b91c1c;
+  color: #fff;
+  border: 1px solid #7f1d1d;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+#loginError.show {
+  display: block;
+  opacity: 1;
+  animation: shake 0.3s ease;
+}
+
+/* Success box */
+#loginSuccess {
+  display: none;
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  background: #15803d;
+  color: #fff;
+  border: 1px solid #166534;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+#loginSuccess.show {
+  display: block;
+  opacity: 1;
+}
+
+/* Shake animation */
+@keyframes shake {
+  0%   { transform: translateX(0); }
+  20%  { transform: translateX(-5px); }
+  40%  { transform: translateX(5px); }
+  60%  { transform: translateX(-5px); }
+  80%  { transform: translateX(5px); }
+  100% { transform: translateX(0); }
+}
+
