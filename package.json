@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "render-build": "echo 'no build step'"
+    "render-build": "echo no build step"
   },
   "dependencies": {
     "cors": "^2.8.5",
